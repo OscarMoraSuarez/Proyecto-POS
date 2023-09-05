@@ -1,0 +1,13 @@
+img {
+    max-height: 300px;
+    max-width: 200px;
+    object-fit: contain;
+  }
+
+  .card-img-top {
+    margin-bottom: 0;
+  }
+
+  .card-body {
+    padding-top: 0;
+  }
