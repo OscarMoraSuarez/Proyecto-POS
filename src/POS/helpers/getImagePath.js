@@ -1,8 +1,7 @@
 
-
 export const getImagePath = () => {
   
-  const imagePhat=`assets/products/`;
+  const imagePhat='../../../public/assets/products/';
   
   return imagePhat;
 }

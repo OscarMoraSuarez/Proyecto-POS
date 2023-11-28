@@ -102,6 +102,16 @@ export const productos=[
     'categoria':'enlatados'
    },
    {
+      'idProducto':10,
+      'codigo': 7701101240991 ,
+      'descripcion':'Salchicha Viena Zenu85gr',
+      'SKU': 7701101240991,
+      'precioEntrada':8700,
+      'precioSalida':8800,
+      'marca':'',
+      'categoria':'enlatados'
+   },
+   {
     'idProducto':11,  
     'codigo':1467507,
     'descripcion':'Albondigas cerdo Zenú162gr',
@@ -110,6 +120,16 @@ export const productos=[
     'precioSalida':8050,
     'marca':'',
     'categoria':'enlatados'
+   },
+   {
+      'idProducto':11,  
+      'codigo':7702047041291 ,
+      'descripcion':'Salsa de tomate fruco 120g',
+      'SKU':7702047041291 ,
+      'precioEntrada':2500,
+      'precioSalida':2800,
+      'marca':'',
+      'categoria':'viveres'
    },
    {
     'idProducto':12,  
@@ -201,4 +221,24 @@ export const productos=[
     'marca':'',
     'categoria':'aseo'
    },
+   {
+      'idProducto':20,  
+      'codigo':7702057073930 ,
+      'descripcion':'Leche de magnesia mk',
+      'SKU':7702057073930,
+      'precioEntrada':3550,
+      'precioSalida':3650,
+      'marca':'',
+      'categoria':'farmacia'
+     },
+     {
+      'idProducto':20,  
+      'codigo':7704412080867,
+      'descripcion':'Alopurinol memphis 300mg',
+      'SKU':7702057073930,
+      'precioEntrada':12000,
+      'precioSalida':12500,
+      'marca':'',
+      'categoria':'farmacia'
+     }
 ]

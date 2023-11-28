@@ -8,7 +8,7 @@ export const useForm=(initialForm={})=>{
             ...form,
             [name]:value
         })
-        console.log(form)
+        
         
   }
 
