@@ -4,10 +4,9 @@ import { AppRouter } from './router/AppRouter';
 export const PosApp = () => {
   return (
     <>
-        
-        <AuthProvider>
-          <AppRouter/>
-        </AuthProvider>
+      <AuthProvider>
+        <AppRouter/>
+      </AuthProvider>
     </>
     
   )

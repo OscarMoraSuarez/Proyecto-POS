@@ -17,10 +17,6 @@ export const AppRouter = () => {
                                       <PosRoutes/>
                                   </PrivateRoutes>} />                                        
 
-            
-
-
-
         </Routes>
 
     </>
