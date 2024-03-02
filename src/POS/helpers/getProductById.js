@@ -1,7 +1,11 @@
-import { productos } from "../data/productos";
+import { useSelector } from "react-redux";
 
-export const getProductById=(id)=>{
-    const  producto=productos.find(product=>product.idProducto==id)
-    return producto;
+export const getProductById = (id) => {
+
+    const { products } = useSelector(state => state.productos);
+    const product = products.find(product => product.productoId == id);
+    return product
 
 }
+
+

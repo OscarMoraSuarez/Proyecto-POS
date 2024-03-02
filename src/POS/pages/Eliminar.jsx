@@ -1,7 +1,12 @@
 import { useForm } from "../hooks"
+import { useSelector } from "react-redux";
 
 
 export const Eliminar = () => {
+
+ const{ products }=useSelector(state=>state.productos);
+ 
+  
  const producto='Pepsi lata269ml.jpg';
  const imagePath=`/assets/products/${producto}`  
  const{onInputChange,categoria,parametro}=useForm({

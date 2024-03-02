@@ -1,7 +1,7 @@
 import { useForm } from "../hooks"
 
 
-export const MovementStock = ({producto,allLocations}) => {
+export const MovementStock = ({producto,locations}) => {
 
  const{onInputChange,onResetForm,origen,destino,cantidad}=useForm({
     producto:producto,
@@ -13,7 +13,9 @@ export const MovementStock = ({producto,allLocations}) => {
     alert(`haz movido ${cantidad} de ${JSON.stringify(producto.descripcion)} de ${origen} a ${destino}`);
     onResetForm();
   }
-
+  if (!locations || locations.length === 0) {
+    return <div>Cargando ubicaciones...</div>;
+  }
   return (
     <>
         <div className="card bg-dark col-6">
@@ -30,8 +32,8 @@ export const MovementStock = ({producto,allLocations}) => {
             <label htmlFor="origen" className="text-success">origen</label>
             <select onChange={onInputChange} value={origen} name="origen" className="form-control">
                 <option value='ubicacion'>Selecciona una ubicacion</option>
-                { allLocations.map(location => (
-                <option key={location.idUbicacion}>{location.codigo}</option>
+                { locations.map(location => (
+                <option key={location.id}>{location.codigoUbicacion}</option>
                     ))
                 }
             </select>
@@ -39,8 +41,8 @@ export const MovementStock = ({producto,allLocations}) => {
                 
             <select onChange={onInputChange} value={destino} name="destino" className="form-control">
                 <option value='ubicacion'>Selecciona una ubicacion</option>
-                { allLocations.map(location => (
-                <option key={location.idUbicacion}>{location.codigo}</option>
+                { locations.map(location => (
+                <option key={location.id}>{location.codigoUbicacion}</option>
                     ))
                 }
             </select>

@@ -1,25 +1,42 @@
-import { useMemo } from "react";
+import { useMemo, useEffect, useState } from "react";
 import { CardProduct } from "./CardProduct";
-import { getAllProducts } from "../helpers/getAllProducts";
+import { useSelector, useDispatch } from "react-redux";
+import { getProducts } from "../../store/slices";
 
 export const ProductList = () => {
-    const allProducts=useMemo(()=>{
-       return  getAllProducts();
-    },[]);  
-    
+  const [error, setError] = useState(null)
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getProducts())
+      .then(response => {
+        if (response && response.error) {
+          setError(response.error.message);
+        }
+      })
+      .catch(error => {
+        setError(error.message);
+      });
+  }, [dispatch]);
+
+  const { products } = useSelector(state => state.productos);
+  console.log(products);
   return (
-    <>  
-        <div className="container">
-            <div className="row row-cols-1 row-cols-md-2 row-cols-lg-5 g-4 mt-1">
-             
-                { allProducts.map(producto => (
-                    <CardProduct key={producto.idProducto} producto={producto}/>
-                ))
-                }
-            
-                
-            </div>
+    <>
+
+      <div className="container">
+
+        <div className="row row-cols-1 row-cols-md-2 row-cols-lg-5 g-4 mt-1">
+          {error ? (
+            <div className="bg-danger rounded-1 text-light text-center">Error: {error}</div>
+          ) : (
+            products.map(producto => (
+              <CardProduct key={producto.productoId} producto={producto} />
+            ))
+          )}
         </div>
+
+      </div>
     </>
   )
 }

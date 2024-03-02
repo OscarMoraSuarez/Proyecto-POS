@@ -1,11 +1,19 @@
 import { useState } from "react";
 import { posApi } from "../store/Api/posApi";
 
-export const registrarProducto = async (formData) => {
-
+export const registrarIngreso = async (form) => {
+  const productoId=form.productoId;
+  const cantidad=parseInt(form.agregar,10);
+  const ubicacionId=parseInt(form.location,10);
+  const ingreso={
+    productoId,
+    cantidad,
+    ubicacionId
+  }
+  console.log(ingreso);
   try {
 
-    const response = await posApi.post('/producto', formData);
+    const response = await posApi.post('/inventario', ingreso);
     const data = response.data;
     console.log('Formulario enviado exitosamente', data);
     return { data, error: null }; // Operación exitosa

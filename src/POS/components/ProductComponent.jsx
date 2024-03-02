@@ -3,8 +3,8 @@
 
 
 export const ProductComponent = ({producto}) => {
-  const{descripcion,precioEntrada,precioSalida,SKU,idProducto,codigo}=producto;
-  const imagePath=`/assets/products/${descripcion}.jpg`;
+  const{descripcion,precioEntrada,precioSalida,productoId,codigo,imagePath}=producto;
+  
                   
   return (
         <div className="container">
@@ -18,9 +18,8 @@ export const ProductComponent = ({producto}) => {
                   <h6 className="card-title">{descripcion}</h6>
                   <hr/>
                   <h6>Existencia <strong>350</strong></h6>
-                  <p className="card-text text-warning">SKU:<span className="text-success ms-1">{SKU}</span></p>
                   <p className="card-text text-warning">codigo:<span className="text-success ms-1">{codigo}</span></p>    
-                  <p className="card-text text-warning">id:<span className="text-success ms-1">{idProducto}</span></p>
+                  <p className="card-text text-warning">id:<span className="text-success ms-1">{productoId}</span></p>
                   <p className="card-text text-warning">Almacen:<span className="text-success ms-1">200</span></p>
                   <p className="card-text text-warning">Zona Ventas:<span className="text-success ms-1">150</span></p>
                   <p className="card-text text-warning">Precio Entrad:<span className="text-success ms-1">${precioEntrada}</span> </p>
