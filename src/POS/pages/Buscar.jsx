@@ -1,69 +1,77 @@
-import { useLocation, useNavigate } from "react-router-dom";
-import queryString from "query-string";
-import { getProductsByName } from "../helpers";
+import React, { useState, useEffect } from "react";
 import { useForm } from "../hooks";
-import { ProductComponent1 } from "../components/ProductComponent1";
+import { useDispatch, useSelector } from "react-redux";
+import { getProductByCode } from "../../store";
+import { ProductComponent, ErrorComponent, SearchComponent } from "../components";
 
 export const Buscar = () => {
-const navigate=useNavigate();
-const location=useLocation();
-const query=queryString.parse(location.search);
-const {q=''}=queryString.parse(location.search);
-console.log({q});
-const productos=getProductsByName(q);
-const showSearch=(q.length===0);
-const showError = ((productos.length===0)&&(q.length>0));
+  const [error, setError] = useState("");
+  const [search, setSearch] = useState(true);
+  const [showProduct, setShowProduct] = useState(false);
 
-const{searchText,form,onInputChange,onResetForm}=useForm({
-  searchText:''
-})
+  const dispatch = useDispatch();
+  const { productByCode } = useSelector(state => state.productByCode);
+  const searchMessage = "Ingresa el código del producto";
 
-const onFormSubmit=(event)=>{
+  const { productCode, onInputChange, onResetForm } = useForm({
+    productCode: ""
+  });
+
+  useEffect(() => {
+    // Actualizar la visibilidad del componente de búsqueda
+    setSearch(productCode === "" && Object.keys(productByCode).length === 0);
+
+    // Actualizar la visibilidad del componente de producto
+    setShowProduct(Object.keys(productByCode).length > 0);
+  }, [productByCode, productCode]);
+
+  const onFormSubmit = (event) => {
     event.preventDefault();
-    navigate(`?q=${searchText}`)  
-}
-
+    dispatch(getProductByCode(productCode))
+      .then(response => {
+        if (response && response.error) {
+          setError(response.error);
+          setShowProduct(false); // Oculta el componente de producto en caso de error
+        } else {
+          setError("");
+          setShowProduct(true); // Muestra el componente de producto si la búsqueda tiene éxito
+        }
+      })
+      .catch(error => {
+        setError(error.message || 'Error desconocido');
+      });
+    onResetForm();
+  };
+  
   return (
     <>
-     <h1 className='text-info text-center'>Buscar Informacion de Producto</h1>
+      <h1 className="text-info text-center">Buscar Información de Producto</h1>
       <hr />
       <div className="row">
         <div className="col-5 d-flex flex-column">
-          <h4 className='text-success'>Buscando</h4>
+          <h4 className="text-success">Buscando</h4>
           <hr />
-          <form 
-          onSubmit={onFormSubmit}
-          >
-            <input 
-              type="text" 
-              placeholder='busca un producto'
-              className='form-control'
-              name='searchText'
-              value={searchText}
+          <form onSubmit={onFormSubmit}>
+            <input
+              type="text"
+              placeholder="Busca un producto"
+              className="form-control"
+              name="productCode"
+              value={productCode}
               onChange={onInputChange}
-              autoComplete='off'
-              />
-              <button 
-              className='btn btn-outline-success mt-2' 
-              >
-                buscar
-              </button>
+              autoComplete="off"
+            />
+            <button className="btn btn-outline-success mt-2">Buscar</button>
           </form>
         </div>
         <div className="col-7">
-          <h4 className="text-dark">Resultados</h4>
+          <h4>Resultados</h4>
           <hr />
-          <div className="alert alert-success animate__animated animate__fadeIn" style={{display:showSearch?'':'none'}}>
-            Busca un porducto
-          </div>
-          <div className="alert alert-danger  animate__animated animate__fadeIn" style={{ display: showError ? '' : 'none' }}>
-            No hay productos con  <b>{q}</b>
-          </div>
-          
-           {productos.map(producto => <ProductComponent1 key={producto.idProducto} producto={producto}/>)  } 
+          {search && <SearchComponent searchMessage={searchMessage} />}
+          {error && <ErrorComponent errorMessage={error} />}
+          {showProduct && <ProductComponent producto={productByCode} />}
         </div>
       </div>
     </>
-  )
-}
-
+  );
+};

@@ -4,3 +4,8 @@ export * from './productos/productsSlice';
 export * from './productos/productThunks';
 export * from './locations/locationsSlice'; 
 export * from './locations/locationsThunks'; 
+export * from './currentProduct/currentProductSlice';
+export * from './currentProduct/currentProductThunk';
+export * from './error/errorSlice';
+export * from './currentProductByCode/productByCodeSlice';
+export * from './currentProductByCode/productByCodeThunk';

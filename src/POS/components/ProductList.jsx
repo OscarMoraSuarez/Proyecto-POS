@@ -20,7 +20,7 @@ export const ProductList = () => {
   }, [dispatch]);
 
   const { products } = useSelector(state => state.productos);
-  console.log(products);
+  
   return (
     <>
 

@@ -3,6 +3,7 @@
 
 
 export const ProductComponent = ({producto}) => {
+  
   const{descripcion,precioEntrada,precioSalida,productoId,codigo,imagePath}=producto;
   
                   
