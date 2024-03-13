@@ -6,9 +6,11 @@ export const getCategorias = () => {
         dispatch(startLoadingCategorias());
         try {
             const { data } = await posApi.get(`/categoria`)
+            
             dispatch(setCategorias({
                 categorias: data.content
             }))
+            
         } catch (error) {
             console.error("Error al obtener categorías:", error.message);
         }

@@ -5,6 +5,7 @@ import { productsSlice } from './slices';
 import { currentProductSlice } from "./slices";
 import { errorSlice } from './slices';
 import { productByCode } from './slices';
+import { productsByCategorySlice } from './slices';
 export default configureStore({
   reducer: {
     categorias: categoriasSlice.reducer,
@@ -12,7 +13,9 @@ export default configureStore({
     locations:locationsSlice.reducer,
     currentProduct:currentProductSlice.reducer,
     error:errorSlice.reducer,
-    productByCode:productByCode.reducer
+    productByCode:productByCode.reducer,
+    productsByCategory:productsByCategorySlice.reducer
+
   },
   
 });

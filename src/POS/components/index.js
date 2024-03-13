@@ -10,5 +10,7 @@ export * from './ErrorComponent';
 export * from './CargandoComponent';
 export * from './RemoveStock';
 export * from './SearchComponent';
+export * from './EliminarComponent';
+
 
 

@@ -9,3 +9,5 @@ export * from './currentProduct/currentProductThunk';
 export * from './error/errorSlice';
 export * from './currentProductByCode/productByCodeSlice';
 export * from './currentProductByCode/productByCodeThunk';
+export * from './productsByCategory/productsByCategorySlice';
+export * from './productsByCategory/productsByCategoryThunk';
