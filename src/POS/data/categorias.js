@@ -1,1 +1,0 @@
-export const categorias=['aseo','bebidas','enlatados','licores','lacteos','cuidado personal'];

@@ -1,6 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import queryString from "query-string";
-import { getProductsByName } from "../helpers";
 import { useForm } from "../hooks";
 import { CardProduct } from "../components";
 
