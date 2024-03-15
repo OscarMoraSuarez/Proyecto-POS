@@ -7,8 +7,9 @@ export const getProductByCode = (code) => {
         try {                                                         
             
             const { data } = await posApi.get(`/producto/codigo/${code}`);
-            console.log( "data:", data)
+            console.log("Received product data:", data);
             dispatch(setProductByCode(data));
+            return data;
             
         } catch (error) {
             if (error.response) {

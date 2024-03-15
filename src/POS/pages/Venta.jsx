@@ -1,27 +1,33 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { enviarLista } from '../helpers/enviarLista';
+import { getProductByCode } from "../../store";
+import { useDispatch } from 'react-redux';
 
-const initialProducts = [
-  { codigo: '00001', descripcion: 'Producto 1', precio: 10000 },
-  { codigo: '00002', descripcion: 'Producto 2', precio: 15000 },
-  { codigo: '00003', descripcion: 'Producto 3', precio: 2000 },
-];
 
-export const Venta = ({ enviarListaCompras }) => {
-  const [scanedCode, setScanedCode] = useState('');
+
+
+export const Venta = () => {
+  
+  const dispatch=useDispatch();
+  const [productCode, setProductCode] = useState('');
   const [listaCompras, setListaCompras] = useState([]);
   const [total, setTotal] = useState(0);
+  useEffect(() => {
+    let newTotal = 0;
+    listaCompras.forEach((item) => {
+      newTotal += item.cantidad * item.precioSalida;
+    });
+    setTotal(newTotal);
+  }, [listaCompras]);
 
-  const addProduct = (barcode) => {
-    const productToAdd = initialProducts.find((product) => product.codigo === barcode);
-
-    if (productToAdd) {
-      const existingItem = listaCompras.find((item) => item.codigo === productToAdd.codigo);
-
+  const addProduct = (product) => { // Recibe el producto como argumento
+    if (product) {
+      const existingItem = listaCompras.find((item) => item.codigo === product.codigo);
+  
       if (!existingItem) {
         setListaCompras((prevLista) => [
           ...prevLista,
-          { ...productToAdd, cantidad: 1 }
+          { ...product, cantidad: 1 }
         ]);
       } else {
         setListaCompras((prevLista) =>
@@ -32,14 +38,46 @@ export const Venta = ({ enviarListaCompras }) => {
           )
         );
       }
-      setScanedCode('');
-      updateTotal();
+      setProductCode('');
+      /* updateTotal(); */
     } else {
       console.log('No se encontró el producto');
     }
-    console.log(listaCompras);
   };
 
+  const handleInputChange = async ({ target }) => {
+    const productCode = target.value;
+    setProductCode(productCode);
+    await dispatch(getProductByCode(productCode))
+      .then(response => {
+        if (response && response.error) {
+          console.log(response.error);
+        } else {
+          console.log(response);
+          console.log(typeof(response.precioEntrada));
+          console.log(typeof(response.precioSalida));
+          addProduct(response); // Pasa el producto obtenido como argumento
+        }
+      })
+      .catch(error => console.log(error)); 
+  };
+  
+  
+  
+  console.log(listaCompras)
+  //incrementar item
+  const incrementItem = (item) => {
+    setListaCompras((prevLista) =>
+      prevLista.map((cartItem) =>
+        cartItem.codigo === item.codigo
+          ? { ...cartItem, cantidad: cartItem.cantidad + 1 }
+          : cartItem
+      )
+    );
+    /* updateTotal(); */
+  };
+
+  //remover item
   const removeProduct = (item) => {
     if (item.cantidad > 1) {
       setListaCompras((prevLista) =>
@@ -54,56 +92,33 @@ export const Venta = ({ enviarListaCompras }) => {
         prevLista.filter((cartItem) => cartItem.codigo !== item.codigo)
       );
     }
-    updateTotal();
+    /* updateTotal(); */
   };
 
+  //borrar Item
   const deleteItem = (item) => {
     setListaCompras((prevLista) =>
       prevLista.filter((cartItem) => cartItem.codigo !== item.codigo)
     );
-    updateTotal();
+    /* updateTotal(); */
   };
 
-  const incrementItem = (item) => {
-    setListaCompras((prevLista) =>
-      prevLista.map((cartItem) =>
-        cartItem.codigo === item.codigo
-          ? { ...cartItem, cantidad: cartItem.cantidad + 1 }
-          : cartItem
-      )
-    );
-    updateTotal();
-  };
-
-  const updateTotal = () => {
-    let newTotal = 0;
-
-    listaCompras.forEach((item) => {
-      newTotal += item.cantidad * item.precio;
+  // actualizar suma
+  /* const updateTotal = () => {
+    setTotal((prevTotal) => {
+      let newTotal = prevTotal;
+      listaCompras.forEach((item) => {
+        newTotal += item.cantidad * item.precioSalida;
+      });
+      return newTotal;
     });
+  }; */
 
-    setTotal(newTotal);
+  const transeferirLista = () => {
+    // Implementa la lógica para enviar la lista de compras
   };
 
-  const handleInputChange = ({ target }) => {
-    const barcode = target.value;
-    setScanedCode(barcode);
-    addProduct(barcode);
-  };
-  const transeferirLista=()=>{
-    enviarLista(listaCompras)
-    .then((response) => {
-      // Maneja la respuesta del backend si es necesario
-      console.log('Lista de compras enviada con éxito:', response);
-      // Realiza otras acciones, como limpiar la lista de compras
-      setListaCompras([]);
-      setTotal(0);
-    })
-    .catch((error) => {
-      // Maneja cualquier error en la solicitud al backend
-      console.error('Error al enviar la lista de compras:', error);
-    });
-  }
+ console.log(total);
 
   return (
     <div className="container">
@@ -114,8 +129,8 @@ export const Venta = ({ enviarListaCompras }) => {
             className="form-control"
             type="text"
             placeholder="Escanea el código de barras"
-            value={scanedCode}
-            name="codigo"
+            value={productCode}
+            name="productCode"
             onChange={handleInputChange}
           />
           <hr />
@@ -135,18 +150,19 @@ export const Venta = ({ enviarListaCompras }) => {
             <p>Total: ${total}</p>
           </div>
           <div className="col-sm-9">
-            <button className="btn btn-primary mt-2" onClick={transeferirLista}>cerrar</button>     
+            <button className="btn btn-primary mt-2" onClick={transeferirLista}>cerrar</button>
           </div>
-          
+
         </div>
         {/*--------------------Lista de compras----------*/}
-        <div className="col col-sm-12 col-md-9">
+         <div className="col col-sm-12 col-md-9">
           <ul className="list-group">
             {listaCompras.map((item) => (
               <li key={item.codigo} className="list-group-item">
                 <div className="d-flex justify-content-between">
                   <div>
-                   Codigo:{item.codigo}- {item.descripcion} - Cantidad: {item.cantidad} - Subtotal: ${item.cantidad * item.precio}
+                    Codigo:{item.codigo}- {item.descripcion} - Cantidad: {item.cantidad} - Subtotal: ${parseFloat(item.cantidad * item.precioSalida)
+                    }
                   </div>
                   <div>
                     <button className="btn btn-success" onClick={() => incrementItem(item)}>+</button>
@@ -158,7 +174,7 @@ export const Venta = ({ enviarListaCompras }) => {
               </li>
             ))}
           </ul>
-        </div>
+        </div> 
       </div>
     </div>
   );
