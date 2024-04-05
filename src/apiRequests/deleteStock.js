@@ -1,20 +1,24 @@
 import { posApi } from "../store/Api/posApi";
 
-export const eliminarStock = async (form) => {
-   const productoId = form.productoId;
+export const deleteStock = async (form) => {
+
+    console.log("desde la funcion", form);
+    const productoId = form.productoId;
     const cantidad = parseInt(form.cantidad, 10);
-    const ingresoId=parseInt(form.ingresoId);
-    
+    const ubicacionId = parseInt(form.location);
+    const concepto = form.concepto
+
     const eliminar = {
-        ingresoId,
         productoId,
         cantidad,
+        ubicacionId,
+        concepto
     }
-    console.warn("ELIMINAR:",eliminar); 
+    console.warn("eliminar:", eliminar);
 
     console.log(form);
     try {
-        const response = await posApi.put('/inventario', eliminar);
+        const response = await posApi.delete('/egresos', { data: eliminar });
         const data = response.data;
         console.log('Formulario enviado exitosamente', data);
         return { data, error: null }; // Operación exitosa
@@ -35,7 +39,7 @@ export const eliminarStock = async (form) => {
             console.error('Error:', error.message);
             return { data: null, error: { message: error.message } };
         }
-    } 
+    }
 
 
 }

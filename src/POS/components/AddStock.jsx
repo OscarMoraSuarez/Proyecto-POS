@@ -1,14 +1,15 @@
 import { useMemo, useState } from "react";
 import { useForm } from "../hooks";
-import { registrarIngreso, eliminarStock } from "../../apiRequests";
+import { registrarIngreso } from "../../apiRequests";
 
 export const AddStock = ({ producto, locations }) => {
   const { form, onInputChange, onResetForm } = useForm({
     productoId: producto.productoId,
-    agregar: '',
+    codigo: producto.codigo,
+    cantidad: '',
     location: ''
   });
-  const { agregar, location } = form;
+  const { cantidad, location, codigo } = form;
   //Agregar stock
   const agregarStock = async () => {
     const { data } = await (registrarIngreso(form))
@@ -20,13 +21,25 @@ export const AddStock = ({ producto, locations }) => {
 
   };
 
-  
+
 
   return (
     <>
       <div className="row justify-content-center">
         <div className="card bg-dark mt-2 col-6 ">
           <h4 className="text-success text-center">Agregar stock</h4>
+          <div className="input-group mb-1">
+            <input
+              disabled
+              type="text"
+              className="form-control"
+              placeholder="Cantidad"
+              name="codigo"
+              value={codigo}
+              onChange={onInputChange}
+            />
+
+          </div>
           <div className="input-group mb-3 mt-3">
             <select required onChange={onInputChange} value={location} name="location" className="form-control">
               <option value='ubicacion'>Selecciona una ubicacion</option>
@@ -41,12 +54,13 @@ export const AddStock = ({ producto, locations }) => {
               type="number"
               className="form-control"
               placeholder="Cantidad"
-              name="agregar"
-              value={agregar}
+              name="cantidad"
+              value={cantidad}
               onChange={onInputChange}
             />
-            <button onClick={agregarStock} className="btn btn-success" type="button">Agregar stock</button>
+
           </div>
+          <button onClick={agregarStock} className="btn btn-success mb-2" type="button">agregarStock</button>
         </div>
       </div>
 

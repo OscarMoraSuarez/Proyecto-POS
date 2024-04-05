@@ -1,67 +1,86 @@
-import { useLocation, useNavigate } from "react-router-dom";
-import queryString from "query-string";
-import { useForm } from "../hooks";
-import { CardProduct } from "../components";
+import { useDispatch, useSelector } from "react-redux";
+import { getProductByCode,getLocations } from "../../store/";
+import { useEffect, useState } from "react";
+import { ProductComponent, RemoveStock, AddStock } from "../components";
+
 
 export const Movimientos = () => {
-const navigate=useNavigate();
-const location=useLocation();
-const query=queryString.parse(location.search);
-const {q=''}=queryString.parse(location.search);
-console.log({q});
-const productos=getProductsByName(q);
-const showSearch=(q.length===0);
-const showError = ((productos.length===0)&&(q.length>0));
+  const distpatch=useDispatch();
+  const product = useSelector((state) => state.productByCode);
+  const { productByCode, isLoading } = product;
+  const locationsState=useSelector(state=>state.locations);
+  const {locations}=locationsState;
+  console.log(locations)
+  useEffect(() => {
+    distpatch(getLocations());
+  }, [])
+  
+  console.log(productByCode);
+  const {productoId}=productByCode
+  
+  const [code, setCode] = useState("");
+  
+  const dispatch = useDispatch();
+const onInputChange = ({ target }) => {
+    const codigo = target.value;
+    setCode(codigo);
+  };
 
-const{searchText,form,onInputChange,onResetForm}=useForm({
-  searchText:''
-})
+  
 
-const onFormSubmit=(event)=>{
-    event.preventDefault();
-    navigate(`?q=${searchText}`)  
-}
+  
 
+  const seekProduct = () => {
+    
+    dispatch(getProductByCode(code))
+    .then((response) => {
+      const { productoId } = response;
+      console.log(productoId)
+      
+    })
+    .catch((error) => console.error(error));
+  };
+
+  
   return (
     <>
-     <h1 className='text-dark text-center'>Buscar Producto para mover o adicionar</h1>
-      <hr />
-      <div className="row">
-        <div className="col-5">
-          <h4 className='text-success'>Buscando</h4>
-          <hr />
-          <form 
-          onSubmit={onFormSubmit}
-          >
-            <input 
-              type="text" 
-              placeholder='busca un producto'
-              className='form-control'
-              name='searchText'
-              value={searchText}
+      <div className="container d-flex flex-column justify-content-center col-6">
+        <div className="card bg-dark mt-2 ">
+          <h4 className="text-success text-center">Movimientos</h4>
+          <div className="input-group mb-3">
+            <input
+              required
               onChange={onInputChange}
-              autoComplete='off'
-              />
-              <button 
-              className='btn btn-outline-success mt-2' 
-              >
-                buscar
-              </button>
-          </form>
-        </div>
-        <div className="col-7">
-          <h4 className="text-dark">Resultados</h4>
-          <hr />
-          <div className="alert alert-success animate__animated animate__fadeIn" style={{display:showSearch?'':'none'}}>
-            Busca un porducto
+              type="text"
+              className="form-control"
+              placeholder="codigo"
+              name="code"
+              value={code}
+            />
+            <button
+              className="btn btn-success m-"
+              type="button"
+              onClick={seekProduct}
+            >
+              Buscar
+            </button>
           </div>
-          <div className="alert alert-danger  animate__animated animate__fadeIn" style={{ display: showError ? '' : 'none' }}>
-            No hay productos con  <b>{q}</b>
-          </div>
-          
-           {productos.map(producto => <CardProduct key={producto.idProducto} producto={producto}/>)  } 
         </div>
       </div>
+      <hr />
+      {Object.keys(productByCode).length > 0 && (
+        <ProductComponent producto={productByCode} />
+      )}
+      {Object.keys(productByCode).length > 0 && (
+        <div className="container d-flex flex-column justify-content-center">
+          <AddStock producto={productByCode} locations={locations} />
+        </div>
+      )}
+      {Object.keys(productByCode).length > 0 && (
+        <div className="container d-flex flex-column justify-content-center">
+         <RemoveStock producto={productByCode} locations={locations}/>
+        </div>
+      )}
     </>
-  )
-}
+  );
+};

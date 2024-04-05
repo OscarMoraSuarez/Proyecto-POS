@@ -2,7 +2,7 @@ import { posApi } from "../../Api/posApi";
 import { setProductByCode,startLoadingProductByCode } from "./productByCodeSlice";
 export const getProductByCode = (code) => {
     return async (dispatch) => {
-        console.log("desde thunk :",code);
+        //console.log("desde thunk :",code);
         dispatch(startLoadingProductByCode());   
         try {                                                         
             

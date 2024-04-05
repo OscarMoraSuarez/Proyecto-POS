@@ -15,7 +15,7 @@ export const Inventario = () => {
       <div className="container">
           <div className="row d-flex justify-content-center">
 
-              <form action="" className="col-sm-12 col-md-5 col-lg-4 bg-dark border border-success border-2 rounded p-2 mt-3">
+              {/* <form action="" className="col-sm-12 col-md-5 col-lg-4 bg-dark border border-success border-2 rounded p-2 mt-3">
                   <div className="form-group">
                       <label htmlFor="exampleSelect1" className="form-label text-success">Filtrar por categoría</label>
                       <select onChange={onSelectChange}   className="form-select" id="exampleSelect1">
@@ -33,7 +33,7 @@ export const Inventario = () => {
                     <label htmlFor="exampleSelect1" className="form-label text-success">Filtrar por codigo o descripcion</label>
                     <input type="text" className="form-control"/>
                   </div>
-            </form>
+            </form> */}
             
           </div>
       </div>

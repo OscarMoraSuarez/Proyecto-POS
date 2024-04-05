@@ -1,89 +1,116 @@
-import { useEffect, useState } from "react"
-
+import { useEffect, useState } from "react";
 
 export const useKart = () => {
-  const [listaCompras, setListaCompras] = useState([]);
-  const [total, setTotal] = useState(0);
+  const initialSell={
+    subTotal: 0,
+    descuento: 0,
+    total: 0,
+    detallesVenta: []
+  }
+  const [venta, setVenta] = useState(initialSell);
   
-  useEffect(() => {
+  const calcular = () => {
+  setVenta((prevVenta) => {
     let newTotal = 0;
-    listaCompras.forEach((item) => {
-      newTotal += item.cantidad * item.precioSalida;
+    prevVenta.detallesVenta.forEach((item) => {
+      newTotal += item.cantidad * item.precioUnitario;
     });
-    setTotal(newTotal);
-  }, [listaCompras]);
-    
-  
-  
+    return {
+      ...prevVenta,
+      subTotal: newTotal,
+      total: newTotal - prevVenta.descuento
+    };
+  });
+};
 
-  const addProduct = (product) => { // Recibe el producto como argumento
+  // Utilizamos useEffect para realizar los cálculos después de que el estado se haya actualizado
+useEffect(() => {
+  // Calculamos el total usando el subTotal actualizado y el descuento
+  calcular();
+}, [venta.detallesVenta]); // Ejecutamos el efecto solo cuando subTotal cambie
+
+
+/*funcion para añadir  un porducto al carrito*/
+
+  const addProduct = (product) => {
+    console.log("desde addProduct",product)
     if (product) {
-      const existingItem = listaCompras.find((item) => item.codigo === product.codigo);
-  
+      const existingItem = venta.detallesVenta.find((item) => item.codigoProducto === product.codigoProducto);
       if (!existingItem) {
-        setListaCompras((prevLista) => [
-          ...prevLista,
-          { ...product, cantidad: 1 }
-        ]);
+        setVenta((prevVenta) => ({
+          ...prevVenta,
+          detallesVenta: [...prevVenta.detallesVenta, { ...product, cantidad: 1, subTotal: product.precioUnitario }]
+        }));
       } else {
-        setListaCompras((prevLista) =>
-          prevLista.map((item) =>
-            item.codigo === existingItem.codigo
-              ? { ...item, cantidad: item.cantidad + 1 }
+        setVenta((prevVenta) => ({
+          ...prevVenta,
+          detallesVenta: prevVenta.detallesVenta.map((item) =>
+            item.codigoProducto === existingItem.codigoProducto
+              ? { ...item, cantidad: item.cantidad + 1, subTotal: (item.cantidad + 1) * item.precioUnitario }
               : item
           )
-        );
+        }));
       }
-      
-      
     } else {
       console.log('No se encontró el producto');
     }
-  };
-
-  //incrementar item
-  const incrementItem = (item) => {
-    setListaCompras((prevLista) =>
-      prevLista.map((cartItem) =>
-        cartItem.codigo === item.codigo
-          ? { ...cartItem, cantidad: cartItem.cantidad + 1 }
-          : cartItem
-      )
-    );
     
   };
+  
+  /*funcion para incrmentar un item del carrito*/
+
+  const incrementItem = (item) => {
+    setVenta((prevVenta) => ({
+      ...prevVenta,
+      detallesVenta: prevVenta.detallesVenta.map((kartItem) =>
+        kartItem.codigoProducto === item.codigoProducto
+          ? { ...kartItem, cantidad: kartItem.cantidad + 1, subTotal: (kartItem.cantidad + 1) * kartItem.precioUnitario }
+          : kartItem
+      )
+    }));
+    
+  }; 
+
+  /*funcion para decrementar un item del carrito*/
 
   const removeProduct = (item) => {
     if (item.cantidad > 1) {
-      setListaCompras((prevLista) =>
-        prevLista.map((cartItem) =>
-          cartItem.codigo === item.codigo
-            ? { ...cartItem, cantidad: cartItem.cantidad - 1 }
-            : cartItem
+      setVenta((prevVenta) => ({
+        ...prevVenta,
+        detallesVenta: prevVenta.detallesVenta.map((kartItem) =>
+          kartItem.codigoProducto === item.codigoProducto
+            ? { ...kartItem, cantidad: kartItem.cantidad - 1, subTotal: (kartItem.cantidad - 1) * kartItem.precioUnitario }
+            : kartItem
         )
-      );
+      }));
     } else {
-      setListaCompras((prevLista) =>
-        prevLista.filter((cartItem) => cartItem.codigo !== item.codigo)
-      );
+      setVenta((prevVenta) => ({
+        ...prevVenta,
+        detallesVenta: prevVenta.detallesVenta.filter((cartItem) => cartItem.codigoProducto !== item.codigoProducto)
+      }));
     }
     
   };
 
+
+
+  /*funcion para eliminar un item del carrito*/
   const deleteItem = (item) => {
-    setListaCompras((prevLista) =>
-      prevLista.filter((cartItem) => cartItem.codigo !== item.codigo)
-    );
+    setVenta((prevVenta) => ({
+      ...prevVenta,
+      detallesVenta: prevVenta.detallesVenta.filter((kartItem) => kartItem.codigoProducto !== item.codigoProducto)
+    }));
     
-  };
+  }; 
 
-
-  return{
-    listaCompras,
-    total,
+  return {
+    ...venta,
+    initialSell,
+    venta,
     addProduct,
     incrementItem,
     removeProduct,
-    deleteItem
-  } 
-}
+    deleteItem,
+    setVenta,
+  }; 
+};
