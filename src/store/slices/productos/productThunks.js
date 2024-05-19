@@ -4,7 +4,7 @@ export const getProducts = (page = 0) => {
     return async (dispatch, getState) => {
         dispatch(startLoadingProducts());
         try {
-            const { data } = await posApi.get(`/producto?size=20&page=${page}&sort=descripcion`);
+            const { data } = await posApi.get(`/producto?size=10&page=${page}&sort=descripcion`);
             console.log(data.content)
             dispatch(setProducts({
                 products: data.content,

@@ -32,30 +32,28 @@ useEffect(() => {
 
 /*funcion para añadir  un porducto al carrito*/
 
-  const addProduct = (product) => {
-    console.log("desde addProduct",product)
-    if (product) {
-      const existingItem = venta.detallesVenta.find((item) => item.codigoProducto === product.codigoProducto);
-      if (!existingItem) {
-        setVenta((prevVenta) => ({
-          ...prevVenta,
-          detallesVenta: [...prevVenta.detallesVenta, { ...product, cantidad: 1, subTotal: product.precioUnitario }]
-        }));
-      } else {
-        setVenta((prevVenta) => ({
-          ...prevVenta,
-          detallesVenta: prevVenta.detallesVenta.map((item) =>
-            item.codigoProducto === existingItem.codigoProducto
-              ? { ...item, cantidad: item.cantidad + 1, subTotal: (item.cantidad + 1) * item.precioUnitario }
-              : item
-          )
-        }));
-      }
+const addProduct = (product) => {
+  if (product) {
+    const existingItem = venta.detallesVenta.find((item) => item.codigoProducto === product.codigoProducto);
+    if (!existingItem) {
+      setVenta((prevVenta) => {
+        const newDetallesVenta = [...prevVenta.detallesVenta, { ...product, cantidad: 1, subTotal: product.precioUnitario }];
+        return { ...prevVenta, detallesVenta: newDetallesVenta };
+      });
     } else {
-      console.log('No se encontró el producto');
+      setVenta((prevVenta) => {
+        const newDetallesVenta = prevVenta.detallesVenta.map((item) =>
+          item.codigoProducto === existingItem.codigoProducto
+            ? { ...item, cantidad: item.cantidad + 1, subTotal: (item.cantidad + 1) * item.precioUnitario }
+            : item
+        );
+        return { ...prevVenta, detallesVenta: newDetallesVenta };
+      });
     }
-    
-  };
+  } else {
+    console.log('No se encontró el producto');
+  }
+};
   
   /*funcion para incrmentar un item del carrito*/
 
@@ -103,6 +101,11 @@ useEffect(() => {
     
   }; 
 
+  const resetVenta = () => {
+    setVenta(initialSell);
+  };
+ 
+
   return {
     ...venta,
     initialSell,
@@ -112,5 +115,6 @@ useEffect(() => {
     removeProduct,
     deleteItem,
     setVenta,
+    resetVenta
   }; 
 };

@@ -4,5 +4,10 @@ export * from './deleteStock'
 export * from './eliminarByIdRequest'
 export * from './enviarVenta'
 export * from './cantidadRequest'
-
+export * from './allProductsRequest'
+export * from './productsByCategoryRequest'
+export * from './productsCountRequest'
+export * from './CargarVentasMesRequest'
+export * from './ventaDetalleRequest'
+export * from './ventaInfo'
 

@@ -9,6 +9,10 @@ export * from './NotFound';
 export * from './Venta';
 export * from './ProductPage';
 export * from './Administrar';
+export * from './Ventas';
+export * from './DetalleVenta';
+export * from './FiltroVenta'
+
 
 
 

@@ -1,10 +1,12 @@
 import { Navigate, Route, Routes } from "react-router-dom"
 import { Navbar } from "../../ui/components/Navbar"
-import { Home,Agregar,Buscar,Eliminar,Inventario,Movimientos,Venta,NotFound,ProductPage, Administrar } from "../pages"
+import { Home,Agregar,Buscar,Eliminar,Inventario,Movimientos,Venta,NotFound,ProductPage, Administrar, Ventas, DetalleVenta,FiltroVenta } from "../pages"
 
 
 
-export const PosRoutes = () => {
+
+export const 
+PosRoutes = () => {
   return (
     <>
       <Navbar/>
@@ -18,6 +20,9 @@ export const PosRoutes = () => {
               <Route path='venta' element={<Venta/>}/>
               <Route path='buscar' element={<Buscar/>}/>
               <Route path='administrar' element={<Administrar/>}/>
+              <Route path='detalle/:numeroVenta' element={<DetalleVenta/>}/>
+              <Route path='ventas' element={<Ventas/>}/>
+              <Route path='filtro' element={<FiltroVenta/>}/>
               <Route path='producto/:id' element={<ProductPage/>}/>
               <Route path='/' element={<Navigate to={'/home'} />} />
               <Route path='/*' element={<NotFound/>} /> 

@@ -12,6 +12,9 @@ export * from './RemoveStock';
 export * from './SearchComponent';
 export * from './EliminarComponent';
 export * from './ListaCompras';
+export * from './InfoDetalle';
+export * from './InfoVenta'
+
 
 
 

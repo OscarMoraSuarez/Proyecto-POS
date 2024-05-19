@@ -2,10 +2,8 @@ import React from 'react'
 
 export const ListaCompras = ({ detallesVenta, incrementItem, removeProduct, deleteItem }) => {
     // Verifica si detallesVenta está vacío
-    if (detallesVenta.length === 0) {
-        return <div>No hay productos en la lista de compras.</div>;
-    }
-
+    console.log("desde lista de venta", detallesVenta)
+   
     return (
         <>
             <div className="col col-sm-12 col-md-9">

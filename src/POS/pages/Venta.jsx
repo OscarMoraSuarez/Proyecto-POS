@@ -6,7 +6,18 @@ import { getProductByCode } from '../../store';
 import { ListaCompras } from "../components";
 
 
+const SuccessOperation=()=>{
+  return(<>
+    <h4 className='text-success text-center'> venta exitosa</h4>
+  </>)
+}
+
+
 export const Venta = () => {
+  const [showSuccessOperation, setShowSuccesOperation] = useState(false);
+  
+
+
   const productoCard = useSelector(state => state.productByCode.productByCode)
   const initialProduct = {
     codigoProducto: "",
@@ -17,19 +28,20 @@ export const Venta = () => {
   const dispatch = useDispatch();
   const [productCode, setProductCode] = useState('');
 
-  const {initialSell,venta,setVenta, addProduct, incrementItem, removeProduct, deleteItem } = useKart();
+  const {initialSell,venta,setVenta, addProduct, incrementItem, removeProduct, deleteItem, resetVenta } = useKart();
   const { detallesVenta, subTotal, descuento, total } = venta;
 
   useEffect(() => {
     if (product.codigoProducto && product.precioUnitario) {
-      console.log(detallesVenta)
+      console.log("detalles Venta",detallesVenta)
       addProduct(product);
       setProduct(initialProduct); // Restablecer el producto después de agregarlo
     }
-  }, [product, addProduct, initialProduct]);
+  }, [product, initialProduct]);
 
   useEffect(() => {
     seekProduct();
+    setShowSuccesOperation(false);
   }, [productCode]);
 
   const handleInputChange = async ({ target }) => {
@@ -66,10 +78,13 @@ export const Venta = () => {
 
   const sendSell = async () => {
     console.log("enviando venta")
-    await enviarVenta(venta)
-    setVenta(
-      initialSell
-    )
+    const response=await enviarVenta(venta)
+    console.log("status",response.status)
+    if(response.status==201){
+      setShowSuccesOperation(prevSell=>true)
+    }
+    
+    resetVenta();
     
 
   };
@@ -113,7 +128,7 @@ export const Venta = () => {
           >
             enviar
           </button>
-
+          {showSuccessOperation && <SuccessOperation/>}
 
         </div>
         <ListaCompras

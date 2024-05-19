@@ -1,29 +1,15 @@
-import { useMemo, useEffect, useState } from "react";
+import { useState } from "react";
 import { CardProduct } from "./CardProduct";
-import { useSelector, useDispatch } from "react-redux";
-import { getProducts } from "../../store/slices";
+import { Pagination } from "./Pagination";
 
-export const ProductList = () => {
+
+
+
+export const ProductList = ({products, pages,currentPage,setCurrentPage, /* requestPage, setRequestPage */}) => {
   const [error, setError] = useState(null)
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(getProducts())
-      .then(response => {
-        if (response && response.error) {
-          setError(response.error.message);
-        }
-      })
-      .catch(error => {
-        setError(error.message);
-      });
-  }, [dispatch]);
-
-  const { products } = useSelector(state => state.productos);
   
   return (
     <>
-
       <div className="container">
 
         <div className="row row-cols-1 row-cols-md-2 row-cols-lg-5 g-4 mt-1">
@@ -37,6 +23,8 @@ export const ProductList = () => {
         </div>
 
       </div>
+      <Pagination pages={pages} currentPage={currentPage} setCurrentPage={setCurrentPage} r/* equestPage={requestPage} */ /* setRequestPage={setRequestPage} */ />
+
     </>
   )
 }

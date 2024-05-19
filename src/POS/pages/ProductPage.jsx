@@ -46,7 +46,8 @@ export const ProductPage = () => {
       {!error && !isLoading && (
         <>
           <ProductComponent producto={currentProduct} />
-          <div className="container">
+          <div 
+          Name="container">
             <div className="row justify-content-center">
               <AddStock producto={currentProduct} locations={locations} />
               <br />
